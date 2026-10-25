@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vaccines: A Literature Review – Rishika Gupta</title>
+<style>
+:root{--bg:#0f2a2e;--fg:#f3f7f6;--muted:#a9c4c0;--acc:#4fd1b5;--card:#17414a;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef7f5;--fg:#12302f;--muted:#4a6b68;--acc:#0b8f78;--card:#d5ece7;color-scheme:light}}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:Georgia,"Times New Roman",serif;display:flex;flex-direction:column}
+#stage{flex:1;position:relative;overflow:hidden}
+.scene{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:24px;opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s;pointer-events:none}
+.scene.on{opacity:1;transform:none}
+h1{font-size:clamp(30px,7vw,56px);margin:0 0 12px;line-height:1.1}
+h2{font-size:clamp(26px,5.5vw,42px);margin:0 0 18px;color:var(--acc)}
+p,li{font-size:clamp(17px,3.2vw,24px);line-height:1.5;margin:0 0 10px;font-family:system-ui,sans-serif}
+.sub{color:var(--muted)}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{background:var(--card);border-left:4px solid var(--acc);padding:10px 14px;border-radius:8px;font-family:system-ui,sans-serif;font-size:clamp(16px,3vw,22px)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.grid .chip{border-left:0;border-top:4px solid var(--acc)}
+.virus{font-size:64px;margin-bottom:8px}
+#bar{height:5px;background:var(--card)}
+#bar i{display:block;height:100%;width:0;background:var(--acc);transition:width .5s}
+#ctl{display:flex;gap:10px;align-items:center;justify-content:center;padding:12px}
+button{font:600 16px system-ui,sans-serif;padding:10px 20px;border-radius:999px;border:0;background:var(--acc);color:#07201c;cursor:pointer}
+#cap{font:15px system-ui,sans-serif;color:var(--muted);text-align:center;padding:0 16px 4px;min-height:44px}
+</style>
+</head>
+<body>
+<div id="stage">
+ <section class="scene"><div class="virus">💉</div><h1>Vaccines</h1><p class="sub">A Literature Review</p><p><b>Rishika Gupta</b><br>B.Tech Biotechnology · SWYNEX Task 1</p></section>
+ <section class="scene"><h2>Why vaccines?</h2><p>Vaccines help our immune system recognise and fight harmful germs.</p><p>They prevent infectious diseases and reduce the risk of serious illness.</p></section>
+ <section class="scene"><h2>Five reliable sources</h2><div class="chips"><span class="chip">World Health Organization</span><span class="chip">Centers for Disease Control and Prevention</span><span class="chip">Scientific journal articles</span></div></section>
+ <section class="scene"><h2>Types of vaccines</h2><div class="grid"><span class="chip">Live-attenuated</span><span class="chip">Inactivated</span><span class="chip">Subunit</span><span class="chip">Viral-vector</span><span class="chip">mRNA</span></div></section>
+ <section class="scene"><h2>Benefits</h2><div class="chips"><span class="chip">Disease prevention</span><span class="chip">Community protection</span></div></section>
+ <section class="scene"><h2>Challenges</h2><div class="chips"><span class="chip">Vaccine accessibility</span><span class="chip">Misinformation</span><span class="chip">Safety monitoring</span></div></section>
+ <section class="scene"><h2>Takeaway</h2><p>Scientific research drives public health, and vaccines are a powerful result of it.</p></section>
+ <section class="scene"><div class="virus">🙏</div><h1>Thank you for watching!</h1><p class="sub">Rishika Gupta · B.Tech Biotechnology</p></section>
+</div>
+<div id="cap"></div>
+<div id="bar"><i></i></div>
+<div id="ctl"><button id="go">▶ Play video</button><button id="re" style="display:none">↺ Replay</button></div>
+<script>
+var N=[
+"Hello everyone. My name is Rishika Gupta and I am a B.Tech biotechnology student. For my SWYNEX Task 1, I prepared a literature review on the topic Vaccines.",
+"Vaccines are an important part of healthcare because they help our immune system recognise and fight harmful germs. They help prevent infectious diseases and reduce the risk of serious illness.",
+"For my literature review, I studied information from five reliable sources, including the World Health Organization, the Centers for Disease Control and Prevention, and research articles published in scientific journals.",
+"I learned about different types of vaccines, such as live-attenuated, inactivated, subunit, viral-vector, and m R N A vaccines.",
+"I also learned about the benefits of vaccination, including disease prevention and community protection.",
+"At the same time, challenges such as vaccine accessibility, misinformation, and the need for safety monitoring are important to consider.",
+"Overall, this task helped me understand the importance of vaccines and how scientific research contributes to public health.",
+"Thank you for watching my explanation!"];
+var S=document.querySelectorAll(".scene"),cap=document.getElementById("cap"),bar=document.querySelector("#bar i"),go=document.getElementById("go"),re=document.getElementById("re");
+var i=-1,run=false,tm=null,voice=null;
+function pick(){try{var v=speechSynthesis.getVoices();voice=v.find(function(x){return /en-(IN|GB|US)/.test(x.lang)&&/female|Heera|Samantha|Google|Zira/i.test(x.name)})||v.find(function(x){return /^en/.test(x.lang)})||null}catch(e){}}
+try{speechSynthesis.onvoiceschanged=pick;pick()}catch(e){}
+function show(k){S.forEach(function(s,j){s.classList.toggle("on",j===k)});cap.textContent=N[k];bar.style.width=((k+1)/N.length*100)+"%"}
+function next(){if(!run)return;i++;if(i>=N.length){run=false;go.style.display="none";re.style.display="";return}
+ show(i);var t=N[i],done=false;function adv(){if(done)return;done=true;clearTimeout(tm);tm=setTimeout(next,i===N.length-1?0:900)}
+ var ok=false;try{if(window.speechSynthesis){var u=new SpeechSynthesisUtterance(t);if(voice)u.voice=voice;u.rate=.95;u.onend=adv;u.onerror=adv;speechSynthesis.cancel();speechSynthesis.speak(u);ok=true}}catch(e){}
+ tm=setTimeout(adv,(ok?t.split(" ").length*700+4000:t.split(" ").length*380+1500))}
+go.onclick=function(){if(!run){run=true;go.textContent="⏸ Pause";if(i<0||i>=N.length)i=-1;if(i>=0)i--;next()}else{run=false;clearTimeout(tm);try{speechSynthesis.cancel()}catch(e){}go.textContent="▶ Resume"}};
+re.onclick=function(){i=-1;run=true;re.style.display="none";go.style.display="";go.textContent="⏸ Pause";next()};
+show(0);
+</script>
+</body>
+</html>
